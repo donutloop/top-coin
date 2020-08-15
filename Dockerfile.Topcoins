@@ -1,0 +1,25 @@
+ARG GO_VERSION=1.14.4
+
+FROM golang:${GO_VERSION}-stretch AS builder
+
+RUN apt install -y ca-certificates make git curl mercurial gcc
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+COPY . .
+RUN CGO_ENABLED=0 go build -o server ./topcoins/cmd/main.go
+FROM alpine:3.11.0
+
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /app/server /server
+RUN chmod +x /server
+
+RUN addgroup -S topcoins && adduser -D noneroot -G topcoins
+USER noneroot
+
+ENTRYPOINT ["/server"]

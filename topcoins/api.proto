@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/api/annotations.proto";
+
+service TopCoinsService {
+    rpc GetTopcoins(GetTopcoinsRequest) returns (GetTopcoinsResponse) {
+        option (google.api.http) = {
+			get: "/v1/topcoins"
+		};
+    }
+}
+
+message GetTopcoinsRequest {
+    int64 limit = 1;
+}
+
+message GetTopcoinsResponse {
+    repeated Coin coin = 1;
+}
+
+message Coin {
+    int64  rank   = 1;
+    string symbol = 2;
+    double price  = 3;
+}

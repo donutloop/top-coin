@@ -1,0 +1,34 @@
+version: '3.3'
+
+services:
+  ranks:
+    ports:
+      - 0:9003:9003
+    image: donutloop/ranks:latest
+    restart: always
+    environment:
+      - RANKS_ADDR=:9003
+      - CRYPTO_COMPARE_APIKEY=315a98eaccb0379344bab42057b869177ba4b15830b9c8d71fdc4da91f24c09e
+
+  prices:
+    ports:
+      - 0:9002:9002
+    image: donutloop/prices:latest
+    restart: always
+    environment:
+      - PRICES_ADDR=:9002
+      - COIN_MARKET_CAP_APIKEY=5d5d88c7-f77b-4e32-851e-286b8216e563
+
+  topcoins:
+    ports:
+      - 0:8080:8080
+    image: donutloop/topcoins:latest
+    restart: always
+    environment:
+      - TOPCOINS_PROXY_ADDR=:8080
+      - TOPCOINS_ADDR=:9001
+      - PRICES_ADDR=prices:9002
+      - RANKS_ADDR=ranks:9003
+    depends_on:
+      - prices
+      - ranks

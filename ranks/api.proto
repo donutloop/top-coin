@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package proto;
+
+service RanksService {
+    rpc GetRanks(GetRanksRequest) returns (GetRanksResponse) {}
+}
+
+message GetRanksRequest {
+    int64 limit = 1;
+}
+
+message GetRanksResponse {
+    repeated string symbols = 1;
+}

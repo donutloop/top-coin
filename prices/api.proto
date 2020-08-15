@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package proto;
+
+service PricesService {
+    rpc GetPrices(GetPricesRequest) returns (GetPricesResponse) {}
+}
+
+message GetPricesRequest {
+    repeated string symbols = 1;
+}
+
+message GetPricesResponse {
+    map<string, double> prices = 1;
+}
